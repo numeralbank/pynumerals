@@ -27,6 +27,7 @@ setup(
             'pytest-mock',
             'pytest-cov',
             'coverage>=4.2',
+            'pyglottolog>=3.2.2',
         ],
     },
 )
