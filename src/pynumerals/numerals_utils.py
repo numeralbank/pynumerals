@@ -20,13 +20,13 @@ def split_form_table(cldf_wordlist):
 def make_index_link(s):
     stripped = s.split("raw/")[-1]
     stripped_link = s.split("raw/")[-1].replace(" ", "%20")
-    return f"* [{stripped}]({stripped_link})"
+    return "* [{0}]({1})".format(stripped, stripped_link)
 
 
 def make_chan_link(s, url):
     s = s.replace(" ", "%20")
     url = url + s
-    return f" ([Source]({url}))"
+    return " ([Source]({0}))".format(url)
 
 
 def check_for_problems(entry):
@@ -39,7 +39,7 @@ def check_for_problems(entry):
 
 def make_language_name(language_name=""):
     if language_name:
-        return f" ({language_name})"
+        return " ({0})".format(language_name)
     else:
         return ""
 
