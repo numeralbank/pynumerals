@@ -11,7 +11,7 @@ from pynumerals.process_html import find_tables, get_file_paths
 
 def test_init_repo(tmpdir):
     with zipfile.ZipFile(str(Path(__file__).parent / 'repo_data.zip'), 'r') as zip_ref:
-        zip_ref.extractall(tmpdir)
+        zip_ref.extractall(str(Path(tmpdir)))
     pytest.raw_htmls = Path(tmpdir) / 'raw'
     gl_repos = Path(tmpdir) / 'glottolog_repo'
     glottolog = Glottolog(gl_repos)
