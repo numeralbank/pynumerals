@@ -1,5 +1,4 @@
 import pytest
-import zipfile
 from pathlib import Path
 from pyglottolog import Glottolog
 
@@ -9,26 +8,17 @@ from pynumerals.value_parser import value_parser
 from pynumerals.process_html import find_tables, get_file_paths
 
 
-def test_init_repo(tmpdir):
-    with zipfile.ZipFile(str(Path(__file__).parent / 'repo_data.zip'), 'r') as zip_ref:
-        zip_ref.extractall(tmpdir)
-    pytest.raw_htmls = Path(tmpdir / 'raw')
-    gl_repos = Path(tmpdir) / 'glottolog_repo'
-    glottolog = Glottolog(gl_repos)
-    pytest.gc_codes = glottolog.languoids_by_code()
-    pytest.gc_iso = glottolog.iso.languages
-
-
-def test_numeral_tables():
-    d = list(find_tables([pytest.raw_htmls / 'Abui.htm']))[0]
+def test_numeral_tables(tmprepo):
+    glottolog = Glottolog(tmprepo['glottolog'])
+    d = list(find_tables([tmprepo['raw'] / 'Abui.htm']))[0]
     assert len(d) == 7
     entry = NumeralsEntry(
         base_name=d[0],
         tables=d[1],
         file_name=d[2],
         title_name=d[3],
-        codes=pytest.gc_codes,
-        iso=pytest.gc_iso,
+        codes=glottolog.languoids_by_code(),
+        iso=glottolog.iso.languages,
         source=d[4],
         base=d[5],
         comment=d[6],
@@ -37,25 +27,28 @@ def test_numeral_tables():
     assert entry.get_numeral_lexemes()[0][0][6][0] == 'tä.ˈlä.mä'
 
 
-def test_num_entry():
-    expected_gl_codes = ['abui1241', 'copa1236', 'bank1259']
-    for i, f in enumerate([pytest.raw_htmls / 'Abui.htm',
-                          pytest.raw_htmls / 'Zoque-Copainala.htm',
-                          pytest.raw_htmls / 'Dogon-Bankan-Tey.htm']):
-        d = list(find_tables([f]))[0]
-        entry = NumeralsEntry(
-            base_name=d[0],
-            tables=d[1],
-            file_name=d[2],
-            title_name=d[3],
-            codes=pytest.gc_codes,
-            iso=pytest.gc_iso,
-            source=d[4],
-            base=d[5],
-            comment=d[6],
-        )
-        assert entry.base_name == Path(f).stem
-        assert entry.glottocodes[0] == expected_gl_codes[i]
+@pytest.mark.parametrize("x, expected", [
+        ('Abui.htm', 'abui1241'),
+        ('Zoque-Copainala.htm', 'copa1236'),
+        ('Dogon-Bankan-Tey.htm', 'bank1259')])
+def test_num_entry(tmprepo, x, expected):
+    raw_htmls = tmprepo['raw']
+    glottolog = Glottolog(tmprepo['glottolog'])
+    f = raw_htmls / x
+    d = list(find_tables([f]))[0]
+    entry = NumeralsEntry(
+        base_name=d[0],
+        tables=d[1],
+        file_name=d[2],
+        title_name=d[3],
+        codes=glottolog.languoids_by_code(),
+        iso=glottolog.iso.languages,
+        source=d[4],
+        base=d[5],
+        comment=d[6],
+    )
+    assert entry.base_name == Path(f).stem
+    assert entry.glottocodes[0] == expected
 
 
 def test_parse_number():
@@ -70,15 +63,16 @@ def test_parse_number():
     assert pytest.approx(parse_number("1,22:")) == 1.22
 
 
-def test_fuzzy_number_matching():
-    d = list(find_tables([pytest.raw_htmls / 'Aari.htm']))[0]
+def test_fuzzy_number_matching(tmprepo):
+    glottolog = Glottolog(tmprepo['glottolog'])
+    d = list(find_tables([tmprepo['raw'] / 'Aari.htm']))[0]
     entry = NumeralsEntry(
         base_name=d[0],
         tables=d[1],
         file_name=d[2],
         title_name=d[3],
-        codes=pytest.gc_codes,
-        iso=pytest.gc_iso,
+        codes=glottolog.languoids_by_code(),
+        iso=glottolog.iso.languages,
         source=d[4],
         base=d[5],
         comment=d[6],
@@ -107,11 +101,11 @@ def test_fuzzy_number_matching():
     assert parse_number(cell_content[19][1]) == 2000
 
 
-def test_get_file_paths():
-    assert len(get_file_paths(pytest.raw_htmls)) == 4
+def test_get_file_paths(tmprepo):
+    assert len(get_file_paths(tmprepo['raw'])) == 4
 
 
-def test_value_parser(tmpdir):
+def test_value_parser():
     val, comment, other_form, loan = value_parser("ab [AB] (<Ido)   {c} (o)")
     assert val == 'AB'
     assert comment == '(<Ido)   {c} (o)'
@@ -122,4 +116,6 @@ def test_value_parser(tmpdir):
     assert comment == '{AA}1 (c), < Ido '
     assert other_form is None
     assert loan is True
-    tmpdir.remove()
+    val, comment, other_form, loan = value_parser("[abc]")
+    assert val == 'abc'
+    assert other_form is None

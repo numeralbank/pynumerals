@@ -1,24 +1,16 @@
-from pytest import raises, approx
+import pytest
 from pynumerals.errorcheck import errorchecks
 
 good_ones = ["lima", "li.ma", "liorma"]
-bad_ones = ["1. lima", "lima <Tongan", "5", "English", "lima or rima",
-            "IPA", "～", "or:"]
+bad_ones = ["1. lima", "lima <Tongan", "5", "English",
+            "lima or rima", "IPA", "～", "or:"]
 
 
-def test_error_checks():
-    for s in good_ones:
-        r = False
-        for check in errorchecks:
-            if check(s):
-                r = True
-                break
-        assert not r
+@pytest.mark.parametrize("x", good_ones)
+def test_error_checks(x):
+    assert not any(check(x) for check in errorchecks)
 
-    for s in bad_ones:
-        r = False
-        for check in errorchecks:
-            if check(s):
-                r = True
-                break
-        assert r
+
+@pytest.mark.parametrize("x", bad_ones)
+def test_error_checks_bad(x):
+    assert any(check(x) for check in errorchecks)
