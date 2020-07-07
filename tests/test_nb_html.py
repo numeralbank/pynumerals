@@ -8,22 +8,17 @@ from pynumerals.value_parser import value_parser
 from pynumerals.process_html import find_tables, get_file_paths
 
 
-def test_numeral_tables(tmpdir, create_repo):
-    raw_htmls = Path(tmpdir) / 'raw'
-    gl_repos = Path(tmpdir) / 'glottolog_repo'
-    glottolog = Glottolog(gl_repos)
-    gc_codes = glottolog.languoids_by_code()
-    gc_iso = glottolog.iso.languages
-
-    d = list(find_tables([raw_htmls / 'Abui.htm']))[0]
+def test_numeral_tables(tmprepo):
+    glottolog = Glottolog(tmprepo['glottolog'])
+    d = list(find_tables([tmprepo['raw'] / 'Abui.htm']))[0]
     assert len(d) == 7
     entry = NumeralsEntry(
         base_name=d[0],
         tables=d[1],
         file_name=d[2],
         title_name=d[3],
-        codes=gc_codes,
-        iso=gc_iso,
+        codes=glottolog.languoids_by_code(),
+        iso=glottolog.iso.languages,
         source=d[4],
         base=d[5],
         comment=d[6],
@@ -32,31 +27,28 @@ def test_numeral_tables(tmpdir, create_repo):
     assert entry.get_numeral_lexemes()[0][0][6][0] == 'tä.ˈlä.mä'
 
 
-def test_num_entry(tmpdir, create_repo):
-    raw_htmls = Path(tmpdir) / 'raw'
-    gl_repos = Path(tmpdir) / 'glottolog_repo'
-    glottolog = Glottolog(gl_repos)
-    gc_codes = glottolog.languoids_by_code()
-    gc_iso = glottolog.iso.languages
-
-    expected_gl_codes = ['abui1241', 'copa1236', 'bank1259']
-    for i, f in enumerate([raw_htmls / 'Abui.htm',
-                          raw_htmls / 'Zoque-Copainala.htm',
-                          raw_htmls / 'Dogon-Bankan-Tey.htm']):
-        d = list(find_tables([f]))[0]
-        entry = NumeralsEntry(
-            base_name=d[0],
-            tables=d[1],
-            file_name=d[2],
-            title_name=d[3],
-            codes=gc_codes,
-            iso=gc_iso,
-            source=d[4],
-            base=d[5],
-            comment=d[6],
-        )
-        assert entry.base_name == Path(f).stem
-        assert entry.glottocodes[0] == expected_gl_codes[i]
+@pytest.mark.parametrize("x, expected", [
+        ('Abui.htm', 'abui1241'),
+        ('Zoque-Copainala.htm', 'copa1236'),
+        ('Dogon-Bankan-Tey.htm', 'bank1259')])
+def test_num_entry(tmprepo, x, expected):
+    raw_htmls = tmprepo['raw']
+    glottolog = Glottolog(tmprepo['glottolog'])
+    f = raw_htmls / x
+    d = list(find_tables([f]))[0]
+    entry = NumeralsEntry(
+        base_name=d[0],
+        tables=d[1],
+        file_name=d[2],
+        title_name=d[3],
+        codes=glottolog.languoids_by_code(),
+        iso=glottolog.iso.languages,
+        source=d[4],
+        base=d[5],
+        comment=d[6],
+    )
+    assert entry.base_name == Path(f).stem
+    assert entry.glottocodes[0] == expected
 
 
 def test_parse_number():
@@ -71,21 +63,16 @@ def test_parse_number():
     assert pytest.approx(parse_number("1,22:")) == 1.22
 
 
-def test_fuzzy_number_matching(tmpdir, create_repo):
-    raw_htmls = Path(tmpdir) / 'raw'
-    gl_repos = Path(tmpdir) / 'glottolog_repo'
-    glottolog = Glottolog(gl_repos)
-    gc_codes = glottolog.languoids_by_code()
-    gc_iso = glottolog.iso.languages
-
-    d = list(find_tables([raw_htmls / 'Aari.htm']))[0]
+def test_fuzzy_number_matching(tmprepo):
+    glottolog = Glottolog(tmprepo['glottolog'])
+    d = list(find_tables([tmprepo['raw'] / 'Aari.htm']))[0]
     entry = NumeralsEntry(
         base_name=d[0],
         tables=d[1],
         file_name=d[2],
         title_name=d[3],
-        codes=gc_codes,
-        iso=gc_iso,
+        codes=glottolog.languoids_by_code(),
+        iso=glottolog.iso.languages,
         source=d[4],
         base=d[5],
         comment=d[6],
@@ -114,9 +101,8 @@ def test_fuzzy_number_matching(tmpdir, create_repo):
     assert parse_number(cell_content[19][1]) == 2000
 
 
-def test_get_file_paths(tmpdir, create_repo):
-    raw_htmls = Path(tmpdir) / 'raw'
-    assert len(get_file_paths(raw_htmls)) == 4
+def test_get_file_paths(tmprepo):
+    assert len(get_file_paths(tmprepo['raw'])) == 4
 
 
 def test_value_parser():
