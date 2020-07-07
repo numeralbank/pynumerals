@@ -8,17 +8,9 @@ bad_ones = ["1. lima", "lima <Tongan", "5", "English",
 
 @pytest.mark.parametrize("x", good_ones)
 def test_error_checks(x):
-    r = False
-    for check in errorchecks:
-        if check(x):
-            r = True  # pragma: no cover
-    assert not r
+    assert not any(check(x) for check in errorchecks)
 
 
 @pytest.mark.parametrize("x", bad_ones)
 def test_error_checks_bad(x):
-    r = False
-    for check in errorchecks:
-        if check(x):
-            r = True
-    assert r
+    assert any(check(x) for check in errorchecks)
