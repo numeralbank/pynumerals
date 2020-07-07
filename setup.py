@@ -23,7 +23,7 @@ setup(
         'dev': ['flake8', 'wheel', 'twine'],
         'test': [
             'mock',
-            'pytest>=4.3',
+            'pytest>=5.4',
             'pytest-mock',
             'pytest-cov',
             'coverage>=4.2',
