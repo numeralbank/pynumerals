@@ -1,5 +1,4 @@
 import pytest
-import zipfile
 from pathlib import Path
 from pyglottolog import Glottolog
 
@@ -9,26 +8,22 @@ from pynumerals.value_parser import value_parser
 from pynumerals.process_html import find_tables, get_file_paths
 
 
-def test_init_repo(tmpdir):
-    with zipfile.ZipFile(str(Path(__file__).parent / 'repo_data.zip'), 'r') as zip_ref:
-        zip_ref.extractall(str(Path(tmpdir)))
-    pytest.raw_htmls = Path(tmpdir) / 'raw'
+def test_numeral_tables(tmpdir, create_repo):
+    raw_htmls = Path(tmpdir) / 'raw'
     gl_repos = Path(tmpdir) / 'glottolog_repo'
     glottolog = Glottolog(gl_repos)
-    pytest.gc_codes = glottolog.languoids_by_code()
-    pytest.gc_iso = glottolog.iso.languages
+    gc_codes = glottolog.languoids_by_code()
+    gc_iso = glottolog.iso.languages
 
-
-def test_numeral_tables():
-    d = list(find_tables([pytest.raw_htmls / 'Abui.htm']))[0]
+    d = list(find_tables([raw_htmls / 'Abui.htm']))[0]
     assert len(d) == 7
     entry = NumeralsEntry(
         base_name=d[0],
         tables=d[1],
         file_name=d[2],
         title_name=d[3],
-        codes=pytest.gc_codes,
-        iso=pytest.gc_iso,
+        codes=gc_codes,
+        iso=gc_iso,
         source=d[4],
         base=d[5],
         comment=d[6],
@@ -37,19 +32,25 @@ def test_numeral_tables():
     assert entry.get_numeral_lexemes()[0][0][6][0] == 'tä.ˈlä.mä'
 
 
-def test_num_entry():
+def test_num_entry(tmpdir, create_repo):
+    raw_htmls = Path(tmpdir) / 'raw'
+    gl_repos = Path(tmpdir) / 'glottolog_repo'
+    glottolog = Glottolog(gl_repos)
+    gc_codes = glottolog.languoids_by_code()
+    gc_iso = glottolog.iso.languages
+
     expected_gl_codes = ['abui1241', 'copa1236', 'bank1259']
-    for i, f in enumerate([pytest.raw_htmls / 'Abui.htm',
-                          pytest.raw_htmls / 'Zoque-Copainala.htm',
-                          pytest.raw_htmls / 'Dogon-Bankan-Tey.htm']):
+    for i, f in enumerate([raw_htmls / 'Abui.htm',
+                          raw_htmls / 'Zoque-Copainala.htm',
+                          raw_htmls / 'Dogon-Bankan-Tey.htm']):
         d = list(find_tables([f]))[0]
         entry = NumeralsEntry(
             base_name=d[0],
             tables=d[1],
             file_name=d[2],
             title_name=d[3],
-            codes=pytest.gc_codes,
-            iso=pytest.gc_iso,
+            codes=gc_codes,
+            iso=gc_iso,
             source=d[4],
             base=d[5],
             comment=d[6],
@@ -70,15 +71,21 @@ def test_parse_number():
     assert pytest.approx(parse_number("1,22:")) == 1.22
 
 
-def test_fuzzy_number_matching():
-    d = list(find_tables([pytest.raw_htmls / 'Aari.htm']))[0]
+def test_fuzzy_number_matching(tmpdir, create_repo):
+    raw_htmls = Path(tmpdir) / 'raw'
+    gl_repos = Path(tmpdir) / 'glottolog_repo'
+    glottolog = Glottolog(gl_repos)
+    gc_codes = glottolog.languoids_by_code()
+    gc_iso = glottolog.iso.languages
+
+    d = list(find_tables([raw_htmls / 'Aari.htm']))[0]
     entry = NumeralsEntry(
         base_name=d[0],
         tables=d[1],
         file_name=d[2],
         title_name=d[3],
-        codes=pytest.gc_codes,
-        iso=pytest.gc_iso,
+        codes=gc_codes,
+        iso=gc_iso,
         source=d[4],
         base=d[5],
         comment=d[6],
@@ -107,11 +114,12 @@ def test_fuzzy_number_matching():
     assert parse_number(cell_content[19][1]) == 2000
 
 
-def test_get_file_paths():
-    assert len(get_file_paths(pytest.raw_htmls)) == 4
+def test_get_file_paths(tmpdir, create_repo):
+    raw_htmls = Path(tmpdir) / 'raw'
+    assert len(get_file_paths(raw_htmls)) == 4
 
 
-def test_value_parser(tmpdir):
+def test_value_parser():
     val, comment, other_form, loan = value_parser("ab [AB] (<Ido)   {c} (o)")
     assert val == 'AB'
     assert comment == '(<Ido)   {c} (o)'
@@ -122,4 +130,6 @@ def test_value_parser(tmpdir):
     assert comment == '{AA}1 (c), < Ido '
     assert other_form is None
     assert loan is True
-    tmpdir.remove()
+    val, comment, other_form, loan = value_parser("[abc]")
+    assert val == 'abc'
+    assert other_form is None
