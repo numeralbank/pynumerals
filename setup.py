@@ -17,6 +17,7 @@ setup(
         'attr',
         'beautifulsoup4>=4.6.3',
         'clldutils',
+        'python-levenshtein',
         'fuzzywuzzy',
     ],
     extras_require={
