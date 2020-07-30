@@ -1,5 +1,4 @@
 CHAR_REPL = {
-
     # replace Charis SIL PUA characters
     "": "\u1DC4",  # U+F171 -> COMBINING MACRON-ACUTE
     "": "\u1DC5",  # U+F172 -> COMBINING GRAVE-MACRON
@@ -16,6 +15,7 @@ CHAR_REPL = {
     "": "ɤ",  # U+F1B5
 
 }
+
 BASE_MAP = {
     "(2, 5) cyclic": "",
     "(2, 5, 20) cyclic": "",

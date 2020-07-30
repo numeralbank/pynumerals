@@ -3,7 +3,6 @@ from pynumerals.mappings import CHAR_REPL
 
 
 def value_parser(value):
-
     other_form = None
     loan = False
     val = re.sub(r'\s*\*+$', '', value.strip())  # remove trailing *
