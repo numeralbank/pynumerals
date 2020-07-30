@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pynumerals',
-    version='1.0.0',
+    version='1.0.0.dev0',
     license='Apache 2.0',
     description='Helper library for numeralbank projects',
     long_description=open('README.md').read(),
