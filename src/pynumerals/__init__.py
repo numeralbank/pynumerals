@@ -1,4 +1,5 @@
-#
+__version__ = "1.0.0.dev0"
+
 from pynumerals.errorcheck import *  # noqa: F401, F403
 from pynumerals.mappings import *  # noqa: F401, F403
 from pynumerals.numerals_html import *  # noqa: F401, F403
