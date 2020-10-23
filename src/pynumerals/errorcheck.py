@@ -86,12 +86,12 @@ def error_has_blacklist_item(value):
 
 
 errorchecks = [
-     error_fullstop,
-     error_has_blacklist_item,
-     error_loanword,
-     error_is_numeric,
-     error_has_numeric,
-     error_has_abbr,
-     error_has_gloss,
-     error_has_parenthesis,
+    error_fullstop,
+    error_has_blacklist_item,
+    error_loanword,
+    error_is_numeric,
+    error_has_numeric,
+    error_has_abbr,
+    error_has_gloss,
+    error_has_parenthesis,
 ]
