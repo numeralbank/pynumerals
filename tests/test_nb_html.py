@@ -116,6 +116,11 @@ def test_value_parser():
     assert comment == '{AA}1 (c), < Ido '
     assert other_form is None
     assert loan is True
+    val, comment, other_form, loan = value_parser("ab(c) (bar)  < Ido <from Odo (foo)")
+    assert val == 'ab(c)'
+    assert comment == '(foo), < Ido < from Odo  (bar)'
+    assert other_form is None
+    assert loan is True
     val, comment, other_form, loan = value_parser("[abc]")
     assert val == 'abc'
     assert other_form is None

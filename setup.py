@@ -37,7 +37,6 @@ setup(
         'test': [
             'mock>=4.0.2',
             'pytest>=6.0.2',
-            'pytest-mock>=3.3.1',
             'pytest-cov>=2.10.1',
             'coverage>=5.3',
             'pyglottolog>=3.2.2',
