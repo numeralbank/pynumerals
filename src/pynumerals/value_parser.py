@@ -39,8 +39,8 @@ def value_parser(value):
                     stack += 1
                     if stack == 0:
                         break
-            comment = val[len(val)-i-1:].strip()
-            val = val[0:(len(val)-i-1)].strip()
+            comment = val[len(val) - i - 1:].strip()
+            val = val[0:(len(val) - i - 1)].strip()
     # comment phase 2
     m = re.search(r'^(.*?)\s+(\(.*?\))\s*$', val)
     if m:

@@ -266,7 +266,7 @@ SKIP = [
     "Yucuna.htm",  # Yucuna.html
     "Sakirabia.htm",  # Sakirabia-Mekens.htm
     "Mawe.htm",  # Satere-Mawe.htm
-    ]
+]
 SKIP_RE = re.compile(r"(?i)question")
 
 ETHNOLOGUE = re.compile(r"(:?(http[s]?://)?www|archive)\.ethnologue\.(?:com|org)/", re.IGNORECASE)
@@ -321,18 +321,18 @@ def get_file_paths(raw_htmls, n=None):
     if n:  # pragma: no cover
         return sorted(
             [f for f in walk(raw_htmls) if
-                f.suffix.startswith(".htm") and
-                not f.name.startswith("Copy of") and
-                f.name not in SKIP and
-                not re.search(SKIP_RE, f.name)]
+                f.suffix.startswith(".htm")
+                and not f.name.startswith("Copy of")
+                and f.name not in SKIP
+                and not re.search(SKIP_RE, f.name)]
         )[:n]
     else:
         return sorted(
             [f for f in walk(raw_htmls) if
-                f.suffix.startswith(".htm") and
-                not f.name.startswith("Copy of") and
-                f.name not in SKIP and
-                not re.search(SKIP_RE, f.name)]
+                f.suffix.startswith(".htm")
+                and not f.name.startswith("Copy of")
+                and f.name not in SKIP
+                and not re.search(SKIP_RE, f.name)]
         )
 
 

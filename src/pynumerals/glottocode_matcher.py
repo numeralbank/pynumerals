@@ -19,11 +19,11 @@ class GlottocodeMatcher:
         else:
             candidates = [
                 (
-                    self.codes[l.code].glottocode,
-                    ts_ratio(l.name, self.base_name),
+                    self.codes[lg.code].glottocode,
+                    ts_ratio(lg.name, self.base_name),
                 )
-                for l in self.iso
-                if l.code in self.codes
+                for lg in self.iso
+                if lg.code in self.codes
             ]
 
             candidates = sorted(

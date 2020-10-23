@@ -28,9 +28,9 @@ def test_numeral_tables(tmprepo):
 
 
 @pytest.mark.parametrize("x, expected", [
-        ('Abui.htm', 'abui1241'),
-        ('Zoque-Copainala.htm', 'copa1236'),
-        ('Dogon-Bankan-Tey.htm', 'bank1259')])
+    ('Abui.htm', 'abui1241'),
+    ('Zoque-Copainala.htm', 'copa1236'),
+    ('Dogon-Bankan-Tey.htm', 'bank1259')])
 def test_num_entry(tmprepo, x, expected):
     raw_htmls = tmprepo['raw']
     glottolog = Glottolog(tmprepo['glottolog'])
