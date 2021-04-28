@@ -140,4 +140,5 @@ BASE_MAP = {
     "tetravigesimal": "tetravigesimal",
     "trigesimal": "trigesimal",
     "vigesimal AND quadragesimal AND quattrocentimal": "vigesimal AND quadragesimal AND quattrocentimal",
+    "ternary": "ternary",
 }
