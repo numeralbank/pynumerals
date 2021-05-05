@@ -1,6 +1,6 @@
 import pathlib
 
-from idspy import IDSDataset
+from pynumerals import IDSDataset
 
 
 class Dataset(IDSDataset):
