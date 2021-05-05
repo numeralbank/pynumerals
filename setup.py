@@ -23,12 +23,19 @@ setup(
     package_dir={'': 'src'},
     include_package_data=True,
     zip_safe=False,
+    entry_points={
+        "cldfbench.commands": [
+            "pynumerals=pynumerals.commands",
+        ]
+    },
     platforms='any',
     python_requires='>=3.5',
     install_requires=[
         'attr',
         'beautifulsoup4>=4.9.1',
         'clldutils>=3.5.4',
+        'pylexibank>=2.8.2',
+        'openpyxl>=3.0.5',
         'python-levenshtein>=0.12',
         'fuzzywuzzy>=0.18',
     ],

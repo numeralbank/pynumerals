@@ -163,3 +163,28 @@ FAMILIES = [
     "Algic",
     "Cariban",
 ]
+
+XLSX_LABELS = {
+    'param': 'NUMERAL',
+    'form': 'FORM (IPA)',
+    'form_comment': 'COMMENT',
+    'loan': 'LOAN',
+    'other_form': 'OTHER ORTHOGRAPHY (delimiter: ;)',
+    'glottocode': 'GLOTTOCODE:',
+    'isocode': 'ISO CODE 639 (SIL CODE):',
+    'name': 'LANGUAGE NAME:',
+    'name_zh': 'LANGUAGE NAME (Chinese):',
+    'sourcefile': 'SOURCE FILE NAME (HTML file name):',
+    'base': 'NUMERAL BASE:',
+    'author_fam': 'AUTHOR FAMILY NAME:',
+    'author_first': 'AUTHOR FIRST NAME:',
+    'author': 'AUTHOR (complete text):',
+    'ref': 'REFERENCE:',
+    'glotto_ref_id': 'GLOTTOLOG REF ID (if present):',
+    'date': 'DATE:',
+    'countries': 'COUNTRIES:',
+    'other_location': 'OTHER LOCATIONS:',
+    'lg_comment': 'COMMENT (can be HTML):',
+    'data': 'Data',
+    'metadata': 'Metadata',
+}
