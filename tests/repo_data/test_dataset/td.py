@@ -1,8 +1,8 @@
 import pathlib
 
-from pynumerals import IDSDataset
+import pylexibank
 
 
-class Dataset(IDSDataset):
+class Dataset(pylexibank.Dataset):
     dir = pathlib.Path(__file__).parent
     id = "test"
