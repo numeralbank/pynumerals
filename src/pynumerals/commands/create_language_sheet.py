@@ -4,12 +4,13 @@ based on data of the passed language ID.
 If passed language ID is 'template' empty sheets of all parameter will be generated.
 """
 import pathlib
-import openpyxl
 import collections
+
+import openpyxl
 import pycldf
 import pylexibank
-
 from cldfbench.cli_util import with_dataset, add_dataset_spec
+
 from ..numerals_utils import XLSX_LABELS
 
 
@@ -32,7 +33,7 @@ def create_language_sheet(dataset, args):
     is_template = False
     ds = dataset.cldf_reader()
 
-    desired_lang_id = str(args.lang_id)
+    desired_lang_id = args.lang_id
     if desired_lang_id.lower() == 'template':
         desired_lang_id = '{glottocode}-{x}'
         is_template = True
